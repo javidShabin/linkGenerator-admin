@@ -5,12 +5,14 @@ import toast from "react-hot-toast";
 
 const AllUsers = () => {
   const [userList, setUserList] = useState([]);
+  const [deleteTarget, setDeleteTarget] = useState(null); // store delete user details
 
   useEffect(() => {
     const getUsersList = async () => {
       try {
         const response = await axiosInstance.get("/admin/user-details");
-        setUserList(response.data.data.users);
+        const users = response.data.data.users || [];
+        setUserList(users);
       } catch (error) {
         console.log(error);
       }
@@ -18,10 +20,13 @@ const AllUsers = () => {
     getUsersList();
   }, []);
 
-  const handleDelete = async (id) => {
+  const confirmDelete = async () => {
+    if (!deleteTarget) return;
     try {
-      const response = await axiosInstance.delete(`/admin/delete-user/${id}`);
+      const response = await axiosInstance.delete(`/admin/delete-user/${deleteTarget._id}`);
       toast.success(response.data.message);
+      setUserList((prev) => prev.filter((user) => user._id !== deleteTarget._id));
+      setDeleteTarget(null);
     } catch (error) {
       console.log(error);
     }
@@ -50,77 +55,109 @@ const AllUsers = () => {
 
       <h1 className="text-white text-3xl font-bold mb-8">All Users</h1>
 
-      {/* Users Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
-        {userList.map((user) => (
-          <div
-            key={user._id}
-            className="relative w-full max-w-[360px] mx-auto backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl shadow-lg p-3 transition-all duration-300 hover:bg-white/20 hover:scale-105"
-          >
-            {/* Toggle Button - Top Left */}
-            <div className="absolute top-3 left-3">
-              <label className="inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  defaultChecked={user.isActive}
-                  onChange={() => handleToggle(user._id)}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-400 rounded-full peer-focus:outline-none peer-checked:bg-green-500 transition-colors relative">
-                  <span className="absolute top-[2px] left-[2px] w-5 h-5 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"></span>
-                </div>
-              </label>
-            </div>
-
-            {/* Delete Button */}
-            <button
-              onClick={() => handleDelete(user._id)}
-              className="absolute top-3 right-3 p-1.5 bg-red-500/80 hover:bg-red-600 text-white rounded-full transition"
+      {userList.length === 0 ? (
+        <p className="text-center text-gray-400 text-lg">No user found</p>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+          {userList.map((user) => (
+            <div
+              key={user._id}
+              className="relative w-full max-w-[360px] mx-auto backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl shadow-lg p-3 transition-all duration-300 hover:bg-white/20 hover:scale-105"
             >
-              <Trash2 size={18} />
-            </button>
+              {/* Toggle Button */}
+              <div className="absolute top-3 left-3">
+                <label className="inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    defaultChecked={user.isActive}
+                    onChange={() => handleToggle(user._id)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-400 rounded-full peer-focus:outline-none peer-checked:bg-green-500 transition-colors relative">
+                    <span className="absolute top-[2px] left-[2px] w-5 h-5 bg-white rounded-full transition-transform duration-300 peer-checked:translate-x-5"></span>
+                  </div>
+                </label>
+              </div>
 
-            {/* Profile Image */}
-            <img
-              src={user.profileImg || "https://via.placeholder.com/150"}
-              alt={user.userName}
-              className="w-20 h-20 rounded-full border-2 border-white/30 mx-auto object-cover"
-            />
-
-            {/* User Info */}
-            <h2 className="mt-4 text-xl font-semibold text-center">
-              {user.userName}
-            </h2>
-            <p className="text-sm text-gray-300 text-center">{user.email}</p>
-
-            {/* Status Badges */}
-            <div className="flex justify-center gap-2 mt-3 flex-wrap">
-              <span
-                className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  user.isActive ? "bg-green-500/70" : "bg-red-500/70"
-                }`}
+              {/* Delete Button */}
+              <button
+                onClick={() => setDeleteTarget(user)}
+                className="absolute top-3 right-3 p-1.5 bg-red-500/80 hover:bg-red-600 text-white rounded-full transition"
               >
-                {user.isActive ? "Active" : "Inactive"}
-              </span>
-              {user.isPro ? (
-                <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-500/70">
-                  Pro
-                </span>
-              ) : (
-                <span className="px-3 py-1 rounded-full text-xs font-medium bg-red-500/70">
-                  Normal
-                </span>
-              )}
-            </div>
+                <Trash2 size={18} />
+              </button>
 
-            {/* Dates */}
-            <div className="text-xs text-gray-400 mt-3 text-center">
-              <p>Joined: {new Date(user.createdAt).toLocaleDateString()}</p>
-              <p>Updated: {new Date(user.updatedAt).toLocaleDateString()}</p>
+              {/* Profile Image */}
+              <img
+                src={user.profileImg || "https://via.placeholder.com/150"}
+                alt={user.userName}
+                className="w-20 h-20 rounded-full border-2 border-white/30 mx-auto object-cover"
+              />
+
+              {/* User Info */}
+              <h2 className="mt-4 text-xl font-semibold text-center">
+                {user.userName}
+              </h2>
+              <p className="text-sm text-gray-300 text-center">{user.email}</p>
+
+              {/* Status Badges */}
+              <div className="flex justify-center gap-2 mt-3 flex-wrap">
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    user.isActive ? "bg-green-500/70" : "bg-red-500/70"
+                  }`}
+                >
+                  {user.isActive ? "Active" : "Inactive"}
+                </span>
+                {user.isPro ? (
+                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-500/70">
+                    Pro
+                  </span>
+                ) : (
+                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-red-500/70">
+                    Normal
+                  </span>
+                )}
+              </div>
+
+              {/* Dates */}
+              <div className="text-xs text-gray-400 mt-3 text-center">
+                <p>Joined: {new Date(user.createdAt).toLocaleDateString()}</p>
+                <p>Updated: {new Date(user.updatedAt).toLocaleDateString()}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteTarget && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-[#1a1a2e] rounded-2xl shadow-lg p-6 max-w-sm w-full border border-white/10">
+            <h2 className="text-xl font-semibold text-white mb-3">
+              Confirm Deletion
+            </h2>
+            <p className="text-gray-300 mb-5">
+              Are you sure you want to delete{" "}
+              <span className="text-red-400 font-bold">{deleteTarget.userName}</span>?
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteTarget(null)}
+                className="px-4 py-2 rounded-lg bg-gray-600 hover:bg-gray-500 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 transition"
+              >
+                Delete
+              </button>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
 
       {/* Animation Styles */}
       <style>
