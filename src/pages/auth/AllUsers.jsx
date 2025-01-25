@@ -20,19 +20,24 @@ const AllUsers = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axiosInstance.delete(`/admin/delete-user/${id}`)
-      toast.success(response.data.message)
+      const response = await axiosInstance.delete(`/admin/delete-user/${id}`);
+      toast.success(response.data.message);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   const handleToggle = async (id) => {
     try {
-      const response = await axiosInstance.put(`/admin/toggle-active/${id}`)
-      console.log(response)
+      const response = await axiosInstance.put(`/admin/toggle-active/${id}`);
+      setUserList((prev) =>
+        prev.map((user) =>
+          user._id === id ? { ...user, isActive: !user.isActive } : user
+        )
+      );
+      toast.success(response.data.message);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -83,7 +88,9 @@ const AllUsers = () => {
             />
 
             {/* User Info */}
-            <h2 className="mt-4 text-xl font-semibold text-center">{user.userName}</h2>
+            <h2 className="mt-4 text-xl font-semibold text-center">
+              {user.userName}
+            </h2>
             <p className="text-sm text-gray-300 text-center">{user.email}</p>
 
             {/* Status Badges */}
