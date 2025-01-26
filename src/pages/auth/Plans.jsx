@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../configs/axiosInstance";
 import { Pencil, Trash2, ToggleLeft, ToggleRight } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Plans = () => {
   const [currentPackage, setCurrentPackage] = useState([]);
@@ -8,19 +9,37 @@ const Plans = () => {
   useEffect(() => {
     const getAllPackages = async () => {
       try {
-        const response = await axiosInstance.get("/package/get-packages");
+        const response = await axiosInstance.get("/package/get-packages-admin");
         setCurrentPackage(response.data?.data || []);
       } catch (error) {
         console.error(error);
       }
     };
     getAllPackages();
-  }, []);
+  }, [currentPackage]);
 
   // Admin action functions (empty for now)
-  const handleDelete = (id) => {};
+  const handleDelete = async (id) => {
+    try {
+      const response = await axiosInstance.delete(`/package/del-package/${id}`);
+      toast.success(response.data.message);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.message);
+    }
+  };
   const handleEdit = (id) => {};
-  const handleToggle = (id) => {};
+  const handleToggle = async (id) => {
+    try {
+      const response = await axiosInstance.patch(
+        `/package/packages/${id}/toggle-status`
+      );
+      toast.success(response.data.message)
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
+  };
 
   return (
     <div className="relative min-h-screen bg-[#05030e] text-white p-6 md:p-10 overflow-hidden font-inter">
