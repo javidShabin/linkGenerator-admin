@@ -5,6 +5,7 @@ import {
 import DashboardLayout from "../layout/DashboardLayout";
 import Dashbord from "../pages/auth/Dashbord";
 import SignupForm from "../pages/signupPage";
+import LoginForm from "../pages/loginPage";
 
 export const router = createBrowserRouter([
   {
@@ -17,8 +18,12 @@ export const router = createBrowserRouter([
         element: <Dashbord />
       },
       {
-        path: "signup",
+        path: "signup-page",
         element: <SignupForm />
+      },
+      {
+        path: "login-page",
+        element: <LoginForm />
       }
     ]
   },

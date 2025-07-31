@@ -33,7 +33,7 @@ const AdminSidebar = () => {
       ],
     },
     !isUserExist
-      ? { name: "Signup", path: "/signup" }
+      ? { name: "Signup", path: "/signup-page" }
       : { name: "Logout", isLogout: true },
   ];
 
