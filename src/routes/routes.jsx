@@ -8,6 +8,8 @@ import SignupForm from "../pages/signupPage";
 import LoginForm from "../pages/loginPage";
 import AuthUser from "./protect/AuthUser";
 import ProfilePage from "../pages/auth/Profile";
+import EditProfile from "../pages/auth/EditProfile";
+import GetAllUsers from "../pages/auth/GetAllUsers";
 
 export const router = createBrowserRouter([
   {
@@ -16,7 +18,7 @@ export const router = createBrowserRouter([
 
     children: [
       {
-        path: "/",
+        index: true,
         element: <Dashbord />
       },
       {
@@ -36,6 +38,14 @@ export const router = createBrowserRouter([
           {
             path: "profile",
             element: <ProfilePage />
+          },
+          {
+            path: "settings/edit-profile",
+            element: <EditProfile />
+          },
+          {
+            path: "get-all-users",
+            element: <GetAllUsers />
           }
         ]
       }

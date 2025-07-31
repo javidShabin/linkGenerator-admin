@@ -22,9 +22,10 @@ const AdminSidebar = () => {
 
   const menu = [
     { name: "Home", path: "/" },
-    { name: "Dashboard", path: "/user/dashboard" },
+    { name: "Dashboard", path: "/" },
     { name: "Profile", path: "/admin/profile" },
-    { name: "My Links", path: "/user/dashboard/my-links" },
+    { name: "All users", path: "/admin/get-all-users" },
+    {name: "Premium users", path: "/admin/premium-users"},
     !isUserExist
       ? { name: "Signup", path: "/signup-page" }
       : { name: "Logout", isLogout: true },
@@ -32,7 +33,7 @@ const AdminSidebar = () => {
       name: "Settings",
       path: "/user/dashboard/settings",
       subLinks: [
-        { name: "Edit Profile", path: "/user/dashboard/settings/edit-profile" },
+        { name: "Edit Profile", path: "/admin/settings/edit-profile" },
       ],
     },
     
