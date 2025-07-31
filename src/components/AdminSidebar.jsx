@@ -23,7 +23,7 @@ const AdminSidebar = () => {
   const menu = [
     { name: "Home", path: "/" },
     { name: "Dashboard", path: "/user/dashboard" },
-    { name: "Profile", path: "/user/dashboard/profile" },
+    { name: "Profile", path: "/admin/profile" },
     { name: "My Links", path: "/user/dashboard/my-links" },
     !isUserExist
       ? { name: "Signup", path: "/signup-page" }
