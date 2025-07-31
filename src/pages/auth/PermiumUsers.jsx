@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { axiosInstance } from '../../configs/axiosInstance';
-import { Trash2, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const GetAllUsers = () => {
+const PremiumUser = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState({});
 
   useEffect(() => {
-    const getAllUsers = async () => {
+    const fetchPremiumUsers = async () => {
       try {
-        const response = await axiosInstance.get("/user/get-all-users");
-        const fetchedUsers = response.data.users;
+        const response = await axiosInstance.get("/user/pro-users-list");
+        const fetchedUsers = response.data.proUsers;
 
         setUsers(fetchedUsers);
 
@@ -24,26 +24,25 @@ const GetAllUsers = () => {
 
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching users:", error);
+        console.error("Error fetching premium users:", error);
+        toast.error("Failed to load premium users.");
         setLoading(false);
       }
     };
 
-    getAllUsers();
+    fetchPremiumUsers();
   }, []);
 
   const handleToggle = async (userId) => {
     try {
       await axiosInstance.patch(`/user/toggle-status/${userId}`);
-
-      // Update UI
       setStatus(prev => ({
         ...prev,
         [userId]: !prev[userId],
       }));
     } catch (error) {
       console.error("Toggle failed:", error);
-      alert("Something went wrong while toggling status.");
+      toast.error("Something went wrong while toggling status.");
     }
   };
 
@@ -59,7 +58,7 @@ const GetAllUsers = () => {
     <div className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0d1528] text-white px-4 py-10">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-10">
-          All <span className="text-[#dd63ff]">Users</span>
+          Premium <span className="text-[#dd63ff]">Users</span>
         </h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -76,6 +75,14 @@ const GetAllUsers = () => {
                 <div className="text-sm text-gray-300">{user.email}</div>
                 <div className="text-sm text-gray-500 mt-1">
                   Phone: {user.phone || 'N/A'}
+                </div>
+
+                {/* isPro label */}
+                <div className="text-sm mt-1">
+                  Account:{" "}
+                  <span className={user.isPro ? "text-green-400" : "text-red-400"}>
+                    {user.isPro ? "Premium" : "Normal"}
+                  </span>
                 </div>
 
                 {/* Toggle Button */}
@@ -109,4 +116,4 @@ const GetAllUsers = () => {
   );
 };
 
-export default GetAllUsers;
+export default PremiumUser;

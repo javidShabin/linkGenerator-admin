@@ -10,6 +10,7 @@ import AuthUser from "./protect/AuthUser";
 import ProfilePage from "../pages/auth/Profile";
 import EditProfile from "../pages/auth/EditProfile";
 import GetAllUsers from "../pages/auth/GetAllUsers";
+import PremiumUser from "../pages/auth/PermiumUsers";
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
           {
             path: "get-all-users",
             element: <GetAllUsers />
+          },
+          {
+            path: "premium-users",
+            element: <PremiumUser />
           }
         ]
       }
