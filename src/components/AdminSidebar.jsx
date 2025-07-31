@@ -1,11 +1,24 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Menu, X, ChevronDown, ChevronUp } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+
+
 
 const AdminSidebar = () => {
+  const { isUserExist } = useSelector((state) => state.user);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [isOpen, setIsOpen] = useState(false);
   const [showSettingsLinks, setShowSettingsLinks] = useState(false);
+
+  const handleLogout = () => {
+    dispatch(clearUser());
+    toast.success("Logged out successfully");
+    navigate("/");
+  };
 
   const menu = [
     { name: "Home", path: "/" },
@@ -16,9 +29,12 @@ const AdminSidebar = () => {
       name: "Settings",
       path: "/user/dashboard/settings",
       subLinks: [
-        { name: "Edite Profile", path: "/user/dashboard/settings/edit-profile" },
+        { name: "Edit Profile", path: "/user/dashboard/settings/edit-profile" },
       ],
     },
+    !isUserExist
+      ? { name: "Signup", path: "/signup" }
+      : { name: "Logout", isLogout: true },
   ];
 
   return (
@@ -73,6 +89,17 @@ const AdminSidebar = () => {
                   </div>
                 )}
               </div>
+            ) : item.isLogout ? (
+              <button
+                key={item.name}
+                onClick={() => {
+                  handleLogout();
+                  setIsOpen(false);
+                }}
+                className="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold transition"
+              >
+                {item.name}
+              </button>
             ) : (
               <Link
                 key={item.name}
