@@ -35,7 +35,7 @@ export default function SignupForm() {
   };
 
   const handleGoogleLogin = () => {
-    console.log("Google Login");
+    window.location.href = "https://linkgenerator-t8x6.onrender.com/v1/api/auth/google";
   };
 
   return (

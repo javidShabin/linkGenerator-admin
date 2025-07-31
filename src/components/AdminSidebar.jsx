@@ -25,6 +25,9 @@ const AdminSidebar = () => {
     { name: "Dashboard", path: "/user/dashboard" },
     { name: "Profile", path: "/user/dashboard/profile" },
     { name: "My Links", path: "/user/dashboard/my-links" },
+    !isUserExist
+      ? { name: "Signup", path: "/signup-page" }
+      : { name: "Logout", isLogout: true },
     {
       name: "Settings",
       path: "/user/dashboard/settings",
@@ -32,9 +35,7 @@ const AdminSidebar = () => {
         { name: "Edit Profile", path: "/user/dashboard/settings/edit-profile" },
       ],
     },
-    !isUserExist
-      ? { name: "Signup", path: "/signup-page" }
-      : { name: "Logout", isLogout: true },
+    
   ];
 
   return (
