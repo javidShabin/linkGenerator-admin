@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { axiosInstance } from '../../configs/axiosInstance';
-import { Trash2, Loader2 } from 'lucide-react';
-import toast from 'react-hot-toast';
+import React, { useEffect, useState } from "react";
+import { axiosInstance } from "../../configs/axiosInstance";
+import { Trash2, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
 
 const GetAllUsers = () => {
   const [users, setUsers] = useState([]);
@@ -37,7 +37,7 @@ const GetAllUsers = () => {
       await axiosInstance.patch(`/user/toggle-status/${userId}`);
 
       // Update UI
-      setStatus(prev => ({
+      setStatus((prev) => ({
         ...prev,
         [userId]: !prev[userId],
       }));
@@ -63,46 +63,56 @@ const GetAllUsers = () => {
         </h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {users.map(user => (
-            user._id && (
-              <div
-                key={user._id}
-                className="bg-gradient-to-tr from-[#1f2937] to-[#111827] p-6 rounded-3xl shadow-xl hover:shadow-[#22c55e40] transition-all relative"
-              >
-                {/* User Info */}
-                <div className="text-xl font-semibold text-white mb-1">
-                  {user.userName}
-                </div>
-                <div className="text-sm text-gray-300">{user.email}</div>
-                <div className="text-sm text-gray-500 mt-1">
-                  Phone: {user.phone || 'N/A'}
-                </div>
+          {users.map(
+            (user) =>
+              user._id && (
+                <div
+                  key={user._id}
+                  className="bg-gradient-to-tr from-[#1f2937] to-[#111827] p-6 rounded-3xl shadow-xl hover:shadow-[#22c55e40] transition-all relative"
+                >
+                  {/* User Info */}
+                  <div className="text-xl font-semibold text-white mb-1">
+                    {user.userName}
+                  </div>
+                  <div className="text-sm text-gray-300">{user.email}</div>
+                  <div className="text-sm text-gray-500 mt-1">
+                    Phone: {user.phone || "N/A"}
+                  </div>
 
-                {/* Toggle Button */}
-                <div className="flex justify-between items-center mt-6">
-                  <span
-                    className={`text-sm font-medium ${
-                      status[user._id] ? 'text-green-400' : 'text-gray-400'
-                    }`}
-                  >
-                    {status[user._id] ? 'Active' : 'Inactive'}
-                  </span>
-                  <button
-                    onClick={() => handleToggle(user._id)}
-                    className={`w-12 h-6 flex items-center rounded-full p-1 transition-all duration-300 ease-in-out ${
-                      status[user._id] ? 'bg-green-500' : 'bg-gray-500'
-                    }`}
-                  >
-                    <div
-                      className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${
-                        status[user._id] ? 'translate-x-6' : ''
+                  <div className="text-sm text-gray-400 mt-1">
+                    Last Login:{" "}
+                    <span className="text-[#dd63ff] font-medium">
+                      {user.lastLogin
+                        ? new Date(user.lastLogin).toLocaleString()
+                        : "N/A"}
+                    </span>
+                  </div>
+
+                  {/* Toggle Button */}
+                  <div className="flex justify-between items-center mt-6">
+                    <span
+                      className={`text-sm font-medium ${
+                        status[user._id] ? "text-green-400" : "text-gray-400"
                       }`}
-                    />
-                  </button>
+                    >
+                      {status[user._id] ? "Active" : "Inactive"}
+                    </span>
+                    <button
+                      onClick={() => handleToggle(user._id)}
+                      className={`w-12 h-6 flex items-center rounded-full p-1 transition-all duration-300 ease-in-out ${
+                        status[user._id] ? "bg-green-500" : "bg-gray-500"
+                      }`}
+                    >
+                      <div
+                        className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${
+                          status[user._id] ? "translate-x-6" : ""
+                        }`}
+                      />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )
-          ))}
+              )
+          )}
         </div>
       </div>
     </div>

@@ -28,9 +28,9 @@ export default function LoginForm() {
     }
   };
 
-  const handleGoogleLogin = () => {
-    console.log("Google Login");
-  };
+  // const handleGoogleLogin = () => {
+  //   console.log("Google Login");
+  // };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] px-4">
@@ -98,7 +98,7 @@ export default function LoginForm() {
         </form>
 
         {/* Google Auth */}
-        <div className="mt-6 text-center">
+        {/* <div className="mt-6 text-center">
           <p className="text-sm text-[#94a3b8] mb-2">Or log in with</p>
           <button
             onClick={handleGoogleLogin}
@@ -107,7 +107,7 @@ export default function LoginForm() {
             <img src={googleLogo} alt="Google" className="h-6 w-6 mr-2" />
             <span className="text-[#e5e7eb] text-sm">Continue with Google</span>
           </button>
-        </div>
+        </div> */}
 
         {/* Signup Link */}
         <p className="mt-6 text-center text-sm text-[#94a3b8]">
