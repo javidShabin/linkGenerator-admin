@@ -11,6 +11,7 @@ import ProfilePage from "../pages/auth/Profile";
 import EditProfile from "../pages/auth/EditProfile";
 import GetAllUsers from "../pages/auth/GetAllUsers";
 import PremiumUser from "../pages/auth/PermiumUsers";
+import ForgotPassword from "../pages/FogotPassword";
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: "login-page",
         element: <LoginForm />
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />
       },
 
       {
