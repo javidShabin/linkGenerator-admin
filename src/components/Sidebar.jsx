@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import {
   Home,
   User,
-  Link as LinkIcon,
+  Users,
+  Crown,
+  CreditCard,
+  ClipboardList,
   Settings,
   LogOut,
   UserCog,
@@ -31,9 +34,27 @@ export default function Sidebar({ onNavigate }) {
       path: "/user/dashbord/profile",
     },
     {
-      id: "My-Links",
-      label: "My-Links",
-      icon: LinkIcon,
+      id: "All-users",
+      label: "All-users",
+      icon: Users,
+      path: "/user/dashbord/prev-liks",
+    },
+    {
+      id: "Pro-users",
+      label: "Pro-users",
+      icon: Crown,
+      path: "/user/dashbord/prev-liks",
+    },
+    {
+      id: "Payments",
+      label: "Payments",
+      icon: CreditCard,
+      path: "/user/dashbord/prev-liks",
+    },
+    {
+      id: "Plans",
+      label: "Plans",
+      icon: ClipboardList,
       path: "/user/dashbord/prev-liks",
     },
     {
@@ -159,7 +180,11 @@ export default function Sidebar({ onNavigate }) {
           </button>
         </div>
       ) : (
-        ""
+        <button
+          className={`mt-8 py-2 rounded-[10px] bg-purple-600 hover:bg-purple-700 transition duration-300 text-white text-lg font-semibold shadow-xl`}
+        >
+          🚀 Get Started
+        </button>
       )}
     </aside>
   );
