@@ -26,12 +26,12 @@ export default function Sidebar({ onNavigate }) {
   let userDetails = JSON.parse(localStorage.getItem("user"));
 
   const items = [
-    { id: "Dashboard", label: "Dashboard", icon: Home, path: "/user/dashbord" },
+    { id: "Dashboard", label: "Dashboard", icon: Home, path: "/" },
     {
       id: "Profile",
       label: "Profile",
       icon: User,
-      path: "/user/dashbord/profile",
+      path: "/admin/profile",
     },
     {
       id: "All-users",
@@ -180,11 +180,12 @@ export default function Sidebar({ onNavigate }) {
           </button>
         </div>
       ) : (
-        <button
-          className={`mt-8 py-2 rounded-[10px] bg-purple-600 hover:bg-purple-700 transition duration-300 text-white text-lg font-semibold shadow-xl`}
+        <Link
+          to={"/login-page"}
+          className={`mt-8 py-2 text-center rounded-[10px] bg-purple-600 hover:bg-purple-700 transition duration-300 text-white text-lg font-semibold shadow-xl`}
         >
-          🚀 Get Started
-        </button>
+          <button>🚀 Get Started</button>
+        </Link>
       )}
     </aside>
   );

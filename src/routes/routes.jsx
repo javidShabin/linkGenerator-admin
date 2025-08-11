@@ -6,6 +6,8 @@ import AdminDashboard from "../layouts/AdminDashboard";
 import Dashboard from "../pages/Dashbord";
 import LoginForm from "../pages/LoginPage";
 import SignupForm from "../pages/SignupPage";
+import AuthUser from "./protect/AuthUser";
+import ProfilePage from "../pages/auth/ProfilePage";
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +26,19 @@ export const router = createBrowserRouter([
       {
         path: "signup-page",
         element: <SignupForm />
+      },
+
+
+      {
+        path: "admin",
+        element: <AuthUser />,
+
+        children: [
+          {
+            path: "profile",
+            element: <ProfilePage />
+          }
+        ]
       }
     ]
   },

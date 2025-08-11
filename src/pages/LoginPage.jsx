@@ -58,7 +58,7 @@ export default function LoginForm() {
 
   return (
     <>
-      <div className="min-h-screen w-full flex items-center justify-center px-4 absolute top-0 left-0 right-0">
+     <div className="min-h-screen flex items-center justify-center px-4 py-1 overflow-auto">
         <div className="w-full max-w-md border border-white/10 backdrop-blur-3xl p-6 rounded-2xl shadow-2xl text-white">
           <h2 className="text-2xl font-bold text-center mb-6 text-purple-500">
             Welcome Back
