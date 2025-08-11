@@ -146,12 +146,6 @@ export default function Sidebar({ onNavigate }) {
                     >
                       <UserCog size={14} /> Profile edit
                     </Link>
-                    <Link
-                      to="/user/settings/privacy"
-                      className="flex items-center gap-2 text-sm text-white/70 hover:text-white p-1 rounded-lg hover:bg-white/10"
-                    >
-                      <Shield size={14} /> Privacy
-                    </Link>
                   </div>
                 )}
               </div>
