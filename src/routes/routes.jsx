@@ -1,13 +1,15 @@
-import {
-  createBrowserRouter,
-
-} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import AdminDashboard from "../layouts/AdminDashboard";
 import Dashboard from "../pages/Dashbord";
 import LoginForm from "../pages/LoginPage";
 import SignupForm from "../pages/SignupPage";
 import AuthUser from "./protect/AuthUser";
 import ProfilePage from "../pages/auth/ProfilePage";
+import AllUsers from "../pages/auth/AllUsers";
+import ProUsers from "../pages/auth/ProUsers";
+import PaymentDetails from "../pages/auth/PaymentDetails";
+import Plans from "../pages/auth/Plans";
+import ProfileEdit from "../pages/auth/ProfileEdit";
 
 export const router = createBrowserRouter([
   {
@@ -17,17 +19,16 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Dashboard />
+        element: <Dashboard />,
       },
       {
         path: "login-page",
-        element: <LoginForm />
+        element: <LoginForm />,
       },
       {
         path: "signup-page",
-        element: <SignupForm />
+        element: <SignupForm />,
       },
-
 
       {
         path: "admin",
@@ -36,10 +37,30 @@ export const router = createBrowserRouter([
         children: [
           {
             path: "profile",
-            element: <ProfilePage />
+            element: <ProfilePage />,
+          },
+          {
+            path: "all-users",
+            element: <AllUsers />,
+          },
+          {
+            path: "pro-users",
+            element: <ProUsers />,
+          },
+          {
+            path: "payment-details",
+            element: <PaymentDetails />,
+          },
+          {
+            path: "payment-plans",
+            element: <Plans />,
+          },
+          {
+            path: "edit-profile",
+            element: <ProfileEdit />
           }
-        ]
-      }
-    ]
+        ],
+      },
+    ],
   },
 ]);

@@ -37,25 +37,25 @@ export default function Sidebar({ onNavigate }) {
       id: "All-users",
       label: "All-users",
       icon: Users,
-      path: "/user/dashbord/prev-liks",
+      path: "/admin/all-users",
     },
     {
       id: "Pro-users",
       label: "Pro-users",
       icon: Crown,
-      path: "/user/dashbord/prev-liks",
+      path: "/admin/pro-users",
     },
     {
       id: "Payments",
       label: "Payments",
       icon: CreditCard,
-      path: "/user/dashbord/prev-liks",
+      path: "/admin/payment-details",
     },
     {
       id: "Plans",
       label: "Plans",
       icon: ClipboardList,
-      path: "/user/dashbord/prev-liks",
+      path: "/admin/payment-plans",
     },
     {
       id: "Settings",
@@ -141,7 +141,7 @@ export default function Sidebar({ onNavigate }) {
                 {it.dropdown && settingsOpen && (
                   <div className="ml-12 mt-1 flex flex-col gap-1">
                     <Link
-                      to={"/user/dashbord/edit-profile"}
+                      to={"/admin/edit-profile"}
                       className="flex items-center gap-2 text-sm text-white/70 hover:text-white p-1 rounded-lg hover:bg-white/10"
                     >
                       <UserCog size={14} /> Profile edit
