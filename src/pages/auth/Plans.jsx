@@ -7,13 +7,17 @@ import EditPackageModal from "../../components/EditePackage"; // import your mod
 const Plans = () => {
   const [currentPackage, setCurrentPackage] = useState([]);
   const [editingPackage, setEditingPackage] = useState(null); // store pkg to edit
+  const [loading, setLoading] = useState(false); // ✅ loading state
 
   const getAllPackages = async () => {
+    setLoading(true); // start loading
     try {
       const response = await axiosInstance.get("/package/get-packages-admin");
       setCurrentPackage(response.data?.data || []);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false); // stop loading
     }
   };
 
@@ -62,84 +66,90 @@ const Plans = () => {
         Manage Packages
       </h1>
 
-      {/* Packages Grid */}
-      <div className="relative z-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {currentPackage.length > 0 ? (
-          currentPackage.map((pkg) => (
-            <div
-              key={pkg._id}
-              className="bg-white/10 border border-white/20 rounded-xl p-6 backdrop-blur-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
-            >
-              {/* Package Header */}
-              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-2xl font-bold">{pkg.name}</h2>
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    pkg.isActive
-                      ? "bg-green-500/20 text-green-400"
-                      : "bg-red-500/20 text-red-400"
-                  }`}
-                >
-                  {pkg.isActive ? "Active" : "Inactive"}
-                </span>
+      {/* Loading Spinner */}
+      {loading ? (
+        <div className="relative z-10 flex justify-center items-center min-h-[200px]">
+          <div className="w-12 h-12 border-4 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      ) : (
+        <div className="relative z-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {currentPackage.length > 0 ? (
+            currentPackage.map((pkg) => (
+              <div
+                key={pkg._id}
+                className="bg-white/10 border border-white/20 rounded-xl p-6 backdrop-blur-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col justify-between"
+              >
+                {/* Package Header */}
+                <div className="flex justify-between items-start mb-4">
+                  <h2 className="text-2xl font-bold">{pkg.name}</h2>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      pkg.isActive
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-red-500/20 text-red-400"
+                    }`}
+                  >
+                    {pkg.isActive ? "Active" : "Inactive"}
+                  </span>
+                </div>
+
+                {/* Package Info */}
+                <div className="mb-4 space-y-1">
+                  <p className="text-gray-300">
+                    <strong>Price:</strong> {pkg.price} {pkg.currency}
+                  </p>
+                  <p className="text-gray-300">
+                    <strong>Duration:</strong> {pkg.duration}
+                  </p>
+                </div>
+
+                {/* Features */}
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold mb-2">Features:</h3>
+                  <ul className="list-disc list-inside text-gray-200 space-y-1">
+                    {pkg.features?.map((feature, idx) => (
+                      <li key={idx}>{feature}</li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Actions */}
+                <div className="flex justify-between items-center pt-4 border-t border-white/10">
+                  <button
+                    onClick={() => handleToggle(pkg._id)}
+                    className="flex items-center gap-1 px-3 py-1 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition"
+                  >
+                    {pkg.isActive ? (
+                      <ToggleRight className="w-5 h-5" />
+                    ) : (
+                      <ToggleLeft className="w-5 h-5" />
+                    )}
+                    Toggle
+                  </button>
+
+                  <button
+                    onClick={() => handleEdit(pkg._id)}
+                    className="flex items-center gap-1 px-3 py-1 rounded-lg bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 transition"
+                  >
+                    <Pencil className="w-5 h-5" /> Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(pkg._id)}
+                    className="flex items-center gap-1 px-3 py-1 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 transition"
+                  >
+                    <Trash2 className="w-5 h-5" /> Delete
+                  </button>
+                </div>
               </div>
-
-              {/* Package Info */}
-              <div className="mb-4 space-y-1">
-                <p className="text-gray-300">
-                  <strong>Price:</strong> {pkg.price} {pkg.currency}
-                </p>
-                <p className="text-gray-300">
-                  <strong>Duration:</strong> {pkg.duration}
-                </p>
-              </div>
-
-              {/* Features */}
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold mb-2">Features:</h3>
-                <ul className="list-disc list-inside text-gray-200 space-y-1">
-                  {pkg.features?.map((feature, idx) => (
-                    <li key={idx}>{feature}</li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Actions */}
-              <div className="flex justify-between items-center pt-4 border-t border-white/10">
-                <button
-                  onClick={() => handleToggle(pkg._id)}
-                  className="flex items-center gap-1 px-3 py-1 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition"
-                >
-                  {pkg.isActive ? (
-                    <ToggleRight className="w-5 h-5" />
-                  ) : (
-                    <ToggleLeft className="w-5 h-5" />
-                  )}
-                  Toggle
-                </button>
-
-                <button
-                  onClick={() => handleEdit(pkg._id)}
-                  className="flex items-center gap-1 px-3 py-1 rounded-lg bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 transition"
-                >
-                  <Pencil className="w-5 h-5" /> Edit
-                </button>
-
-                <button
-                  onClick={() => handleDelete(pkg._id)}
-                  className="flex items-center gap-1 px-3 py-1 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 transition"
-                >
-                  <Trash2 className="w-5 h-5" /> Delete
-                </button>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="col-span-full text-center text-gray-400">
-            No packages found.
-          </p>
-        )}
-      </div>
+            ))
+          ) : (
+            <p className="col-span-full text-center text-gray-400">
+              No packages found.
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Edit Modal */}
       {editingPackage && (

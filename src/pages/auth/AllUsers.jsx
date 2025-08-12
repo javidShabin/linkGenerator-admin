@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 const AllUsers = () => {
   const [userList, setUserList] = useState([]);
   const [deleteTarget, setDeleteTarget] = useState(null); // store delete user details
+  const [loading, setLoading] = useState(true); // ✅ Added loading state
 
   useEffect(() => {
     const getUsersList = async () => {
@@ -15,6 +16,8 @@ const AllUsers = () => {
         setUserList(users);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false); // ✅ Stop loading after fetch
       }
     };
     getUsersList();
@@ -55,7 +58,12 @@ const AllUsers = () => {
 
       <h1 className="text-white text-3xl font-bold mb-8">All Users</h1>
 
-      {userList.length === 0 ? (
+      {/* ✅ Loading Indicator */}
+      {loading ? (
+        <div className="flex justify-center items-center min-h-[300px]">
+          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      ) : userList.length === 0 ? (
         <p className="text-center text-gray-400 text-lg">No user found</p>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">

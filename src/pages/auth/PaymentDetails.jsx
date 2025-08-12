@@ -5,6 +5,7 @@ import { Copy, CheckCircle2 } from "lucide-react";
 const PaymentDetails = () => {
   const [payments, setPayments] = useState([]);
   const [copiedId, setCopiedId] = useState(null);
+  const [loading, setLoading] = useState(true); // ✅ Added loading state
 
   useEffect(() => {
     const getPaymentDetails = async () => {
@@ -13,6 +14,8 @@ const PaymentDetails = () => {
         setPayments(response.data.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false); // ✅ Stop loading after fetch
       }
     };
     getPaymentDetails();
@@ -35,73 +38,79 @@ const PaymentDetails = () => {
         Payment Transactions
       </h1>
 
-      {/* Grid Layout */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {payments.map((p, index) => (
-          <div
-            key={index}
-            className="group relative rounded-2xl p-6 backdrop-blur-md bg-white/10 border border-white/20 shadow-lg hover:shadow-purple-500/20 hover:scale-[1.02] transition-all duration-300"
-          >
-            {/* Header */}
-            <div className="mb-4">
-              <h2 className="text-lg font-semibold">{p.userName}</h2>
-              <p className="text-sm text-gray-300">{p.email}</p>
-            </div>
-
-            {/* Info */}
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-400">Plan</span>
-                <span className="px-2 py-1 rounded-lg text-xs font-medium bg-purple-500/20 text-purple-300">
-                  {p.plan}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Amount</span>
-                <span className="text-green-400 font-semibold">
-                  {p.amount} {p.currency}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Status</span>
-                <span
-                  className={`px-2 py-1 rounded-lg text-xs font-medium ${
-                    p.status === "paid"
-                      ? "bg-green-500/20 text-green-400"
-                      : "bg-red-500/20 text-red-400"
-                  }`}
-                >
-                  {p.status}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-400">Date</span>
-                <span className="text-gray-300">
-                  {new Date(p.createdAt).toLocaleDateString()}
-                </span>
+      {/* ✅ Loading Indicator */}
+      {loading ? (
+        <div className="flex justify-center items-center min-h-[300px]">
+          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {payments.map((p, index) => (
+            <div
+              key={index}
+              className="group relative rounded-2xl p-6 backdrop-blur-md bg-white/10 border border-white/20 shadow-lg hover:shadow-purple-500/20 hover:scale-[1.02] transition-all duration-300"
+            >
+              {/* Header */}
+              <div className="mb-4">
+                <h2 className="text-lg font-semibold">{p.userName}</h2>
+                <p className="text-sm text-gray-300">{p.email}</p>
               </div>
 
-              {/* Session ID with copy button */}
-              <div>
-                <span className="text-gray-400 block mb-1">Session ID</span>
-                <div className="flex items-center justify-between bg-white/5 px-3 py-2 rounded-lg border border-white/10">
-                  <span className="truncate max-w-[150px]">{p.sessionId}</span>
-                  <button
-                    onClick={() => handleCopy(p.sessionId, index)}
-                    className="text-gray-400 hover:text-white transition"
+              {/* Info */}
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Plan</span>
+                  <span className="px-2 py-1 rounded-lg text-xs font-medium bg-purple-500/20 text-purple-300">
+                    {p.plan}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Amount</span>
+                  <span className="text-green-400 font-semibold">
+                    {p.amount} {p.currency}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Status</span>
+                  <span
+                    className={`px-2 py-1 rounded-lg text-xs font-medium ${
+                      p.status === "paid"
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-red-500/20 text-red-400"
+                    }`}
                   >
-                    {copiedId === index ? (
-                      <CheckCircle2 size={16} className="text-green-400" />
-                    ) : (
-                      <Copy size={16} />
-                    )}
-                  </button>
+                    {p.status}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Date</span>
+                  <span className="text-gray-300">
+                    {new Date(p.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+
+                {/* Session ID with copy button */}
+                <div>
+                  <span className="text-gray-400 block mb-1">Session ID</span>
+                  <div className="flex items-center justify-between bg-white/5 px-3 py-2 rounded-lg border border-white/10">
+                    <span className="truncate max-w-[150px]">{p.sessionId}</span>
+                    <button
+                      onClick={() => handleCopy(p.sessionId, index)}
+                      className="text-gray-400 hover:text-white transition"
+                    >
+                      {copiedId === index ? (
+                        <CheckCircle2 size={16} className="text-green-400" />
+                      ) : (
+                        <Copy size={16} />
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Animations */}
       <style>
