@@ -2,42 +2,51 @@ import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../configs/axiosInstance";
 import { Pencil, Trash2, ToggleLeft, ToggleRight } from "lucide-react";
 import toast from "react-hot-toast";
+import EditPackageModal from "../../components/EditePackage"; // import your modal
 
 const Plans = () => {
   const [currentPackage, setCurrentPackage] = useState([]);
+  const [editingPackage, setEditingPackage] = useState(null); // store pkg to edit
+
+  const getAllPackages = async () => {
+    try {
+      const response = await axiosInstance.get("/package/get-packages-admin");
+      setCurrentPackage(response.data?.data || []);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    const getAllPackages = async () => {
-      try {
-        const response = await axiosInstance.get("/package/get-packages-admin");
-        setCurrentPackage(response.data?.data || []);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     getAllPackages();
-  }, [currentPackage]);
+  }, []);
 
-  // Admin action functions (empty for now)
   const handleDelete = async (id) => {
     try {
       const response = await axiosInstance.delete(`/package/del-package/${id}`);
       toast.success(response.data.message);
+      getAllPackages(); // refresh list after delete
     } catch (error) {
       console.log(error);
-      toast.error(error.response.message);
+      toast.error(error.response?.message || "Delete failed");
     }
   };
-  const handleEdit = (id) => {};
+
+  const handleEdit = (id) => {
+    const pkg = currentPackage.find((p) => p._id === id);
+    setEditingPackage(pkg); // open modal with package data
+  };
+
   const handleToggle = async (id) => {
     try {
       const response = await axiosInstance.patch(
         `/package/packages/${id}/toggle-status`
       );
-      toast.success(response.data.message)
+      toast.success(response.data.message);
+      getAllPackages(); // refresh list
     } catch (error) {
-      console.log(error)
-      toast.error(error.message)
+      console.log(error);
+      toast.error(error.message);
     }
   };
 
@@ -97,7 +106,6 @@ const Plans = () => {
 
               {/* Actions */}
               <div className="flex justify-between items-center pt-4 border-t border-white/10">
-                {/* Toggle */}
                 <button
                   onClick={() => handleToggle(pkg._id)}
                   className="flex items-center gap-1 px-3 py-1 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition"
@@ -110,7 +118,6 @@ const Plans = () => {
                   Toggle
                 </button>
 
-                {/* Edit */}
                 <button
                   onClick={() => handleEdit(pkg._id)}
                   className="flex items-center gap-1 px-3 py-1 rounded-lg bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 transition"
@@ -118,7 +125,6 @@ const Plans = () => {
                   <Pencil className="w-5 h-5" /> Edit
                 </button>
 
-                {/* Delete */}
                 <button
                   onClick={() => handleDelete(pkg._id)}
                   className="flex items-center gap-1 px-3 py-1 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30 transition"
@@ -134,6 +140,15 @@ const Plans = () => {
           </p>
         )}
       </div>
+
+      {/* Edit Modal */}
+      {editingPackage && (
+        <EditPackageModal
+          pkg={editingPackage}
+          onClose={() => setEditingPackage(null)}
+          onUpdated={getAllPackages}
+        />
+      )}
 
       {/* Animations */}
       <style>
