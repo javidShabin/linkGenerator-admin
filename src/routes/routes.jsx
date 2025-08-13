@@ -10,6 +10,7 @@ import ProUsers from "../pages/auth/ProUsers";
 import PaymentDetails from "../pages/auth/PaymentDetails";
 import Plans from "../pages/auth/Plans";
 import ProfileEdite from "../pages/auth/ProfileEdit";
+import AddPackageModal from "../components/AddPackage";
 
 export const router = createBrowserRouter([
   {
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
           {
             path: "edit-profile",
             element: <ProfileEdite />
+          },
+          {
+            path: "add-plans",
+            element: <AddPackageModal />
           }
         ],
       },

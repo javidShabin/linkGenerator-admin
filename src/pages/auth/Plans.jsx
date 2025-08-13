@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { axiosInstance } from "../../configs/axiosInstance";
-import { Pencil, Trash2, ToggleLeft, ToggleRight } from "lucide-react";
+import { Pencil, Trash2, ToggleLeft, ToggleRight, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import EditPackageModal from "../../components/EditePackage"; // import your modal
+import { Link } from "react-router-dom";
 
 const Plans = () => {
   const [currentPackage, setCurrentPackage] = useState([]);
@@ -62,9 +63,18 @@ const Plans = () => {
       <div className="absolute top-[200px] right-[-200px] w-[450px] h-[450px] bg-pink-500 rounded-full filter blur-3xl opacity-20 animate-moveCircle3"></div>
 
       {/* Title */}
-      <h1 className="text-4xl font-extrabold text-center mb-12 relative z-10">
+      <h1 className="text-4xl font-extrabold text-center mb-6 relative z-10">
         Manage Packages
       </h1>
+
+      {/* New Plan Button */}
+      <div className="relative z-10 flex justify-center mb-12">
+        <Link to={"/admin/add-plans"}>
+          <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-green-500/20 text-green-400 hover:bg-green-500/30 transition">
+            <Plus className="w-5 h-5" /> New Plan
+          </button>
+        </Link>
+      </div>
 
       {/* Loading Spinner */}
       {loading ? (
