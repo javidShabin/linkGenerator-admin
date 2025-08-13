@@ -11,6 +11,7 @@ import PaymentDetails from "../pages/auth/PaymentDetails";
 import Plans from "../pages/auth/Plans";
 import ProfileEdite from "../pages/auth/ProfileEdit";
 import AddPackageModal from "../components/AddPackage";
+import ForgotPassword from "../components/ForgotPassword";
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: "signup-page",
         element: <SignupForm />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />
       },
 
       {
