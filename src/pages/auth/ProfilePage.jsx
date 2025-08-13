@@ -16,7 +16,7 @@ import {
 
 const ProfilePage = () => {
   const [profileDetails, setProfileDetails] = useState({});
-  console.log(profileDetails);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -52,7 +52,7 @@ const ProfilePage = () => {
       label: "Account Type",
       key: "isPro",
       icon: <MdVerified size={20} />,
-      render: (val) => (val ? "Pro User" : "Free User"),
+      render: (val) => (val ? "Pro User" : "Admin"),
     },
     {
       label: "Last Login",

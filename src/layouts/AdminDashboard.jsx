@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { Outlet } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { clearUser, saveUser } from "../redux/feature/userSlice";
+import { axiosInstance } from "../configs/axiosInstance";
 
 const HamburgerIcon = ({ isOpen, toggle }) => (
   <button
@@ -30,6 +33,22 @@ const HamburgerIcon = ({ isOpen, toggle }) => (
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const response = await axiosInstance.get("/user/check-user-auth");
+        const {role, userName, profileImg} = response.data.data
+        localStorage.setItem("user", JSON.stringify({ role, userName, profileImg }));
+        dispatch(saveUser());
+      } catch (error) {
+        dispatch(clearUser());
+        console.error("Error checking user:", error);
+      }
+    };
+    checkUser();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {

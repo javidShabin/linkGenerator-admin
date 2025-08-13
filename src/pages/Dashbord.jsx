@@ -8,8 +8,6 @@ export default function Dashboard() {
   const [countLink, setCountLink] = useState();
   const [userDetails, setUserDetails] = useState();
 
-  console.log(userDetails);
-
   useEffect(() => {
     const getUserDetails = async () => {
       try {

@@ -9,7 +9,7 @@ import AllUsers from "../pages/auth/AllUsers";
 import ProUsers from "../pages/auth/ProUsers";
 import PaymentDetails from "../pages/auth/PaymentDetails";
 import Plans from "../pages/auth/Plans";
-import ProfileEdit from "../pages/auth/ProfileEdit";
+import ProfileEdite from "../pages/auth/ProfileEdit";
 
 export const router = createBrowserRouter([
   {
@@ -57,7 +57,7 @@ export const router = createBrowserRouter([
           },
           {
             path: "edit-profile",
-            element: <ProfileEdit />
+            element: <ProfileEdite />
           }
         ],
       },
