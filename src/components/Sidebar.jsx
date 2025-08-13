@@ -158,13 +158,13 @@ export default function Sidebar({ onNavigate }) {
       {userDetails ? (
         <div className="flex items-center gap-3">
           <img
-            src={userDetails.profileImg}
+            src={userDetails?.profileImg}
             alt="avatar"
             className="w-10 h-10 rounded-full ring-1 ring-white/10"
           />
           <div>
-            <div className="text-sm font-semibold">{userDetails.userName}</div>
-            <div className="text-xs text-white/50">{userDetails.role}</div>
+            <div className="text-sm font-semibold">{userDetails?.userName}</div>
+            <div className="text-xs text-white/50">{userDetails?.role}</div>
           </div>
           <button
             onClick={handleLogout}
