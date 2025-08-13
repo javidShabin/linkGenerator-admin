@@ -18,6 +18,11 @@ const VerifyOtp = ({ email }) => {
   const onSubmit = async (data) => {
     try {
       const response = await axiosInstance.post("/auth/otp-verifying", data);
+      const { role, userName, profileImg } = response.data.user;
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ role, userName, profileImg })
+      );
       toast.success(response.data.message);
       dispatch(saveUser());
       navigate("/");

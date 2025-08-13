@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Home,
   User,
@@ -12,7 +12,7 @@ import {
   Shield,
 } from "lucide-react";
 import { axiosInstance } from "../configs/axiosInstance";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { clearUser } from "../redux/feature/userSlice";
@@ -23,7 +23,15 @@ export default function Sidebar({ onNavigate }) {
   const [active, setActive] = useState("Dashboard");
   const [settingsOpen, setSettingsOpen] = useState(false);
 
-  let userDetails = JSON.parse(localStorage.getItem("user"));
+  const { isUserExist } = useSelector((state) => state.user);
+
+  let userDetails;
+
+  function getUserDetails() {
+    userDetails = JSON.parse(localStorage.getItem("user")) || {};
+  }
+
+  getUserDetails();
 
   const items = [
     { id: "Dashboard", label: "Dashboard", icon: Home, path: "/" },
@@ -75,7 +83,7 @@ export default function Sidebar({ onNavigate }) {
     try {
       await axiosInstance.delete("/auth/user-logout");
       toast.success("Logout success");
-      localStorage.removeItem("user")
+      localStorage.removeItem("user");
       navigate("/login-page");
       dispatch(clearUser());
     } catch (error) {
@@ -155,7 +163,7 @@ export default function Sidebar({ onNavigate }) {
         </nav>
       </div>
 
-      {userDetails ? (
+      {isUserExist ? (
         <div className="flex items-center gap-3">
           <img
             src={userDetails?.profileImg}

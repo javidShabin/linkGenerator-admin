@@ -34,8 +34,9 @@ export default function LoginForm() {
     setLoading(true);
     try {
       const response = await axiosInstance.post("/auth/login-user", data);
-      console.log(response.data);
-      console.log(response.data.user);
+      
+      const {role, userName, profileImg} = response.data.user
+        localStorage.setItem("user", JSON.stringify({ role, userName, profileImg }));
       toast.success("Login success");
       dispatch(saveUser());
       navigate("/");

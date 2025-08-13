@@ -6,6 +6,7 @@ import { axiosInstance } from "../configs/axiosInstance";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import VerifyOtp from "../components/VerifyOtp";
+import { clearUser } from "../redux/feature/userSlice";
 
 export default function SignupForm() {
   const [showOtpForm, setShowOtpForm] = useState(false);
@@ -23,8 +24,10 @@ export default function SignupForm() {
   const password = watch("password");
 
   const onSubmit = async (data) => {
+    console.log(data)
     try {
       setLoading(true);
+      
       const response = await axiosInstance.post("/auth/otp-generation", {
         ...data,
         role: "admin",
@@ -33,6 +36,7 @@ export default function SignupForm() {
       setUserData(data);
       setShowOtpForm(true);
     } catch (error) {
+      console.log(error)
       toast.error("Signup failed");
       dispatch(clearUser());
     } finally {
