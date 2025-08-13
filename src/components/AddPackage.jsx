@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { X, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { axiosInstance } from "../configs/axiosInstance";
 import toast from "react-hot-toast";
 
-const AddPackageModal = ({ onClose, onAdded }) => {
+const AddPackagePage = ({ onAdded }) => {
   const [form, setForm] = useState({
     name: "",
     price: "",
@@ -40,30 +40,20 @@ const AddPackageModal = ({ onClose, onAdded }) => {
       const res = await axiosInstance.post("/package/create-package", form);
       toast.success(res.data.message);
       onAdded();
-      onClose();
     } catch (error) {
       console.error(error);
-      toast.error(error.response.message || "Failed to add package");
+      toast.error(error.response?.message || "Failed to add package");
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-gradient-to-br from-[#1f1c2c] via-[#2d1f4c] to-[#1a1a2e] rounded-2xl shadow-2xl p-6 w-full max-w-2xl text-white relative border border-white/10">
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white transition"
-        >
-          <X className="w-6 h-6" />
-        </button>
-
-        {/* Title */}
-        <h2 className="text-1xl font-bold mb-6 text-center bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
+    <div className="min-h-screen bg-gradient-to-br from-[#1b172a] via-[#0f091b] to-[#131324] text-white p-8">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
           Add New Package
-        </h2>
+        </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Row 1 - Name & Duration */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
@@ -73,17 +63,31 @@ const AddPackageModal = ({ onClose, onAdded }) => {
               value={form.name}
               onChange={handleChange}
               required
-              className="w-full p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-3 rounded-lg bg-white/10 border border-white/20 
+                         focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
             />
-            <input
-              type="text"
+
+            <select
               name="duration"
-              placeholder="Duration"
               value={form.duration}
               onChange={handleChange}
               required
-              className="w-full p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
+              className="w-full p-3 rounded-lg bg-white/10 border border-white/20 
+                         focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+            >
+              <option className="text-black bg-slate-400" value="" disabled>
+                Select Duration
+              </option>
+              <option className="text-black bg-slate-400" value="lifetime">
+                Lifetime
+              </option>
+              <option className="text-black bg-slate-400" value="per year">
+                Per Year
+              </option>
+              <option className="text-black bg-slate-400" value="per month">
+                Per Month
+              </option>
+            </select>
           </div>
 
           {/* Row 2 - Price & Currency */}
@@ -95,7 +99,8 @@ const AddPackageModal = ({ onClose, onAdded }) => {
               value={form.price}
               onChange={handleChange}
               required
-              className="w-full p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-3 rounded-lg bg-white/10 border border-white/20 
+                         focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
             />
             <input
               type="text"
@@ -104,7 +109,8 @@ const AddPackageModal = ({ onClose, onAdded }) => {
               value={form.currency}
               onChange={handleChange}
               required
-              className="w-full p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="w-full p-3 rounded-lg bg-white/10 border border-white/20 
+                         focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
             />
           </div>
 
@@ -113,24 +119,27 @@ const AddPackageModal = ({ onClose, onAdded }) => {
             <label className="block mb-3 font-medium text-gray-300">
               Features
             </label>
-            {form.features.map((feat, idx) => (
-              <div key={idx} className="flex gap-2 mb-3">
-                <input
-                  type="text"
-                  value={feat}
-                  onChange={(e) => handleFeatureChange(idx, e.target.value)}
-                  className="flex-1 p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveFeature(idx)}
-                  className="p-3 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition"
-                >
-                  <Trash2 className="w-5 h-5" />
-                </button>
-              </div>
-            ))}
+            <div className="max-h-48 overflow-y-auto pr-1 custom-scrollbar">
+              {form.features.map((feat, idx) => (
+                <div key={idx} className="flex gap-2 mb-3">
+                  <input
+                    type="text"
+                    value={feat}
+                    onChange={(e) => handleFeatureChange(idx, e.target.value)}
+                    className="flex-1 p-3 rounded-lg bg-white/10 border border-white/20 
+                               focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFeature(idx)}
+                    className="p-3 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                </div>
+              ))}
+            </div>
             <button
               type="button"
               onClick={handleAddFeature}
@@ -143,14 +152,29 @@ const AddPackageModal = ({ onClose, onAdded }) => {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 font-semibold text-lg shadow-lg transition"
+            className="w-full py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 
+                       hover:opacity-90 font-semibold text-lg shadow-lg transition"
           >
             Add Package
           </button>
         </form>
       </div>
+
+      {/* Custom scrollbar styling */}
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: linear-gradient(to bottom, #a855f7, #ec4899);
+          border-radius: 9999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+      `}</style>
     </div>
   );
 };
 
-export default AddPackageModal;
+export default AddPackagePage;

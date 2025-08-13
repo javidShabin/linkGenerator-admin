@@ -12,6 +12,8 @@ const EditPackageModal = ({ pkg, onClose, onUpdated }) => {
     features: []
   });
 
+  const durations = ["lifetime", "per year", "per month"];
+
   useEffect(() => {
     if (pkg) {
       setForm({
@@ -90,14 +92,19 @@ const EditPackageModal = ({ pkg, onClose, onUpdated }) => {
               onChange={handleChange}
               className="w-full p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500"
             />
-            <input
-              type="text"
+            <select
               name="duration"
-              placeholder="Duration"
               value={form.duration}
               onChange={handleChange}
               className="w-full p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
+            >
+              <option className="text-black rounded-lg bg-slate-400" value="">Select Duration</option>
+              {durations.map((d) => (
+                <option className="text-black rounded-lg bg-slate-400" key={d} value={d}>
+                  {d}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Row 2 - Price & Currency */}
@@ -123,23 +130,25 @@ const EditPackageModal = ({ pkg, onClose, onUpdated }) => {
           {/* Features */}
           <div>
             <label className="block mb-3 font-medium text-gray-300">Features</label>
-            {form.features.map((feat, idx) => (
-              <div key={idx} className="flex gap-2 mb-3">
-                <input
-                  type="text"
-                  value={feat}
-                  onChange={(e) => handleFeatureChange(idx, e.target.value)}
-                  className="flex-1 p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveFeature(idx)}
-                  className="p-3 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition"
-                >
-                  <Trash2 className="w-5 h-5" />
-                </button>
-              </div>
-            ))}
+            <div className="max-h-48 overflow-y-auto pr-1">
+              {form.features.map((feat, idx) => (
+                <div key={idx} className="flex gap-2 mb-3">
+                  <input
+                    type="text"
+                    value={feat}
+                    onChange={(e) => handleFeatureChange(idx, e.target.value)}
+                    className="flex-1 p-3 rounded-lg bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFeature(idx)}
+                    className="p-3 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg transition"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                </div>
+              ))}
+            </div>
             <button
               type="button"
               onClick={handleAddFeature}
