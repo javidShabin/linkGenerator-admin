@@ -75,6 +75,7 @@ export default function Sidebar({ onNavigate }) {
     try {
       await axiosInstance.delete("/auth/user-logout");
       toast.success("Logout success");
+      localStorage.removeItem("user")
       navigate("/login-page");
       dispatch(clearUser());
     } catch (error) {

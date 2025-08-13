@@ -48,7 +48,7 @@ const AdminDashboard = () => {
       }
     };
     checkUser();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     const handleResize = () => {
